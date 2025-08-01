@@ -3,6 +3,10 @@
 use Illuminate\Support\Str;
 
 return [
+    'ttl' => [
+        'inventory' => 300, // 5 minutes
+        'warehouse' => 300, // 5 minutes
+    ],
 
     /*
     |--------------------------------------------------------------------------
