@@ -1,7 +1,5 @@
 <?php
 
-// tests/Unit/LowStockEventTest.php
-
 namespace Tests\Unit;
 
 use App\Events\LowStockDetectedEvent;
@@ -60,9 +58,7 @@ class LowStockEventTest extends TestCase
 
     public function test_low_stock_listener_logs_notification()
     {
-        Log::shouldReceive('info')
-            ->once()
-            ->with('Low stock detected', \Mockery::type('array'));
+        Log::shouldReceive('info')->once()->with('Low stock detected', \Mockery::type('array'));
 
         $warehouse = Warehouse::factory()->create(['name' => 'Test Warehouse']);
         $item = InventoryItem::factory()->create([

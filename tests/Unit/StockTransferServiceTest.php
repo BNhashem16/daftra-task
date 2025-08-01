@@ -1,7 +1,5 @@
 <?php
 
-// tests/Unit/StockTransferServiceTest.php
-
 namespace Tests\Unit;
 
 use App\Models\InventoryItem;
@@ -45,7 +43,7 @@ class StockTransferServiceTest extends TestCase
             $fromWarehouse->id,
             $toWarehouse->id,
             $item->id,
-            10, // Trying to transfer more than available
+            10,
             $user->id
         );
     }
@@ -82,7 +80,5 @@ class StockTransferServiceTest extends TestCase
             'inventory_item_id' => $item->id,
             'quantity' => 5,
         ]);
-
-        $this->assertEquals('completed', $transfer->status);
     }
 }

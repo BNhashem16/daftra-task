@@ -1,0 +1,257 @@
+{
+	"info": {
+		"_postman_id": "044cdd02-8aae-4d2a-9fbf-6507d1d7e805",
+		"name": "Daftra Task",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9525326",
+		"_collection_link": "https://interstellar-satellite-6613.postman.co/workspace/My-Workspace~a753e6f9-7133-45c0-894c-410087cfc966/collection/9525326-044cdd02-8aae-4d2a-9fbf-6507d1d7e805?action=share&source=collection_link&creator=9525326"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test('user register successfully', function() {\r",
+									"    pm.response.to.have.status(200)\r",
+									"    pm.environment.set(\"DAFTRA_AUTHORIZATION\", response.data.token);\r",
+									"    pm.environment.set(\"DAFTRA_AUTH_USER_EMAIL\", response.data.email);\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "{{DAFTRA_AUTH_USER_EMAIL}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{DAFTRA_AUTH_USER_PASSWARD}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{DAFTRA_URL}}/login",
+							"host": [
+								"{{DAFTRA_URL}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Apis",
+			"item": [
+				{
+					"name": "inventory",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{DAFTRA_URL}}/inventory",
+							"host": [
+								"{{DAFTRA_URL}}"
+							],
+							"path": [
+								"inventory"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "desk",
+									"disabled": true
+								},
+								{
+									"key": "min_price",
+									"value": "30",
+									"disabled": true
+								},
+								{
+									"key": "max_price",
+									"value": "1000",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-inventory-by-warehourse-id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{DAFTRA_URL}}/warehouses/:warehouse_id/inventory",
+							"host": [
+								"{{DAFTRA_URL}}"
+							],
+							"path": [
+								"warehouses",
+								":warehouse_id",
+								"inventory"
+							],
+							"variable": [
+								{
+									"key": "warehouse_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "stock-transfers",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "from_warehouse_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "to_warehouse_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "inventory_item_id",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "quantity",
+									"value": "152",
+									"type": "text"
+								},
+								{
+									"key": "notes",
+									"value": "This is Free Text",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{DAFTRA_URL}}/stock-transfers",
+							"host": [
+								"{{DAFTRA_URL}}"
+							],
+							"path": [
+								"stock-transfers"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{DAFTRA_AUTHORIZATION}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"pm.request.headers.add({ key: 'Accept', value: 'application/json' });\r",
+					"pm.request.headers.add({ key: 'Content-Type', value: 'application/json' });\r",
+					"// =======================================================================\r",
+					"if (!pm.environment.get(\"DAFTRA_URL\")) {\r",
+					"    pm.environment.set(\"DAFTRA_URL\", \"https://daftra-task.test/api/v1\");\r",
+					"    \r",
+					"}\r",
+					"// =======================================================================\r",
+					"if (!pm.environment.get(\"DAFTRA_AUTH_USER_EMAIL\")) {\r",
+					"    pm.environment.set(\"DAFTRA_AUTH_USER_EMAIL\", \"admin@example.com\");\r",
+					"}\r",
+					"// =======================================================================\r",
+					"if (!pm.environment.get(\"DAFTRA_AUTH_USER_PASSWARD\")) {\r",
+					"    pm.environment.set(\"DAFTRA_AUTH_USER_PASSWARD\", \"password\");\r",
+					"}\r",
+					"// =======================================================================\r",
+					"// =======================================================================\r",
+					"if (!pm.environment.get(\"DAFTRA_AUTHORIZATION\")) {\r",
+					"    pm.environment.set(\"DAFTRA_AUTHORIZATION\", \"\");\r",
+					"}\r",
+					"// ======================================================================="
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
