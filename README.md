@@ -1,61 +1,430 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Inventory Management API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A RESTful API for managing inventory across multiple warehouses built with Laravel 12. This system allows you to manage warehouses, inventory items, stock levels, and transfers between warehouses with comprehensive authentication and caching.
 
-## About Laravel
+## 📋 Table of Contents
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- [Project Overview](#project-overview)
+- [Features](#features)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Database Setup](#database-setup)
+- [Authentication](#authentication)
+- [Running the Application](#running-the-application)
+- [API Documentation](#api-documentation)
+- [Testing](#testing)
+- [Screenshots](#screenshots)
+- [Contact](#contact)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🎯 Project Overview
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+This project implements a simplified RESTful API for managing inventory across multiple warehouses. It includes warehouse management, inventory tracking, stock transfers, and automated low stock notifications.
 
-## Learning Laravel
+### Key Components:
+- **Warehouses**: Manage multiple warehouse locations
+- **Inventory Items**: Track products with SKU, name, and pricing
+- **Stock Management**: Monitor quantities per warehouse
+- **Stock Transfers**: Handle inventory movement between warehouses
+- **Low Stock Alerts**: Automated notifications for low inventory levels
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## ✨ Features
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- **Multi-Warehouse Inventory Management**
+- **Stock Transfer System** with validation
+- **Advanced Search & Filtering** (name, price range, warehouse)
+- **Efficient Pagination** for large datasets
+- **Caching System** for optimized warehouse inventory retrieval
+- **Event-Driven Architecture** (LowStockDetected events)
+- **API Authentication** using Laravel Sanctum
+- **Comprehensive Testing** (Unit, Feature, and Event tests)
+- **Input Validation & Security** against SQL injection
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🛠 Requirements
 
-## Laravel Sponsors
+Before you begin, ensure you have the following installed on your system:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- **PHP**: 8.4 or higher
+- **Laravel**: 12.x
+- **Composer**: 2.8.9 or higher
+- **MySQL**: 5.7 or higher (for production)
+- **SQLite**: (for testing only)
+- **Redis**: (optional, for caching)
 
-### Premium Partners
+## 🚀 Installation
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Follow these steps to get the project up and running:
 
-## Contributing
+### 1. Clone the Repository
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+git clone git@github.com:BNhashem16/daftra-task.git
+cd daftra-task
+```
 
-## Code of Conduct
+### 2. Install PHP Dependencies
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+composer install
+```
 
-## Security Vulnerabilities
+### 3. Environment Configuration
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Copy the example environment file and configure it:
 
-## License
+```bash
+cp .env.example .env
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Generate application key:
+
+```bash
+php artisan key:generate
+```
+
+## ⚙️ Configuration
+
+### Environment Variables
+
+Update your `.env` file with the following configurations:
+
+#### Database Configuration (MySQL)
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=inventory_management
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+```
+
+#### Application Settings
+```env
+APP_NAME="Daftra App"
+APP_ENV=local
+APP_KEY=base64:[generated-key]
+APP_DEBUG=true
+APP_URL=https://daftra-task.test/
+```
+
+#### Cache Configuration (Optional - Redis)
+```env
+CACHE_DRIVER=redis
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+```
+
+## 🗄️ Database Setup
+
+### 1. Create Database
+
+Create a MySQL database for your application:
+
+```sql
+CREATE DATABASE daftra;
+```
+
+### 2. Run Migrations
+
+Execute the database migrations to create all required tables:
+
+```bash
+php artisan migrate
+```
+
+### 3. Seed the Database
+
+Populate the database with sample data using the seeders:
+
+```bash
+php artisan db:seed
+```
+
+This will create:
+- Sample warehouses
+- Sample inventory items
+- Initial stock levels
+- Test users for authentication
+
+### Alternative: Run Migrations with Seeding
+
+```bash
+php artisan migrate --seed
+```
+
+## 🔐 Authentication
+
+This API uses **Laravel Sanctum** for authentication. To access protected endpoints:
+
+### 1. Login to get API Token
+
+```bash
+# Login to get token
+POST /api/v1/login
+{
+    "email": "admin@example.com",
+    "password": "password"
+}
+```
+
+### 2. Use Token in Headers
+
+```bash
+Authorization: Bearer your-api-token-here // Token already shared between apis just click on submit button of login api only
+```
+
+## 🏃‍♂️ Running the Application
+
+### Development Server
+
+Start the Laravel development server:
+
+```bash
+php artisan serve
+```
+
+The application will be available at: `http://localhost:8000`
+
+If you use Largon Localhost you can use: `https://daftra-task.test/`
+
+### Queue Workers (for Event Processing)
+
+Start the queue worker to process low stock notifications:
+
+```bash
+php artisan queue:work
+```
+
+### Cache Management
+
+Clear cache when needed:
+
+```bash
+php artisan cache:clear
+```
+
+## 📚 API Documentation
+
+### Base URL
+```
+http://localhost:8000/api/v1
+```
+
+### Core Endpoints
+
+#### Authentication
+
+- `POST /api/v1/login` - Login user
+
+#### Inventory Management
+- `GET /api/v1/inventory` - Get paginated inventory across all warehouses
+  - Query params: `search`, `min_price`, `max_price`, `page`, `per_page`
+- `GET /api/warehouses/{id}/inventory` - Get inventory for specific warehouse (cached)
+- `POST /api/stock-transfers` - Transfer stock between warehouses (requires auth)
+
+### Request/Response Examples
+
+#### Get Inventory with Filters
+```bash
+GET /api/v1/inventory?search=laptop&min_price=500&max_price=2000&page=1&per_page=10
+
+Response:
+{
+    "message": {
+        "txt": [
+            null
+        ]
+    },
+    "data": {
+        "data": [
+            {
+                "id": 1,
+                "name": "Gaming Laptop",
+                "sku": "LAPTOP-001",
+                "low_stock_threshold": 2,
+                "description": "High-performance gaming laptop with 16GB RAM and 512GB SSD.",
+                "price": "1299.99",
+                "total_stock": 170,
+                "stocks": [
+                    {
+                        "id": 1,
+                        "warehouse": {
+                            "id": 1,
+                            "name": "Main Warehouse",
+                            "location": "El Sheikh Zayed - Cairo"
+                        },
+                        "quantity": 0
+                    },
+                    {
+                        "id": 6,
+                        "warehouse": {
+                            "id": 2,
+                            "name": "West Coast Hub",
+                            "location": "6th of October - Cairo"
+                        },
+                        "quantity": 79
+                    },
+                    {
+                        "id": 11,
+                        "warehouse": {
+                            "id": 3,
+                            "name": "Distribution Center",
+                            "location": "Nasr City - Cairo"
+                        },
+                        "quantity": 91
+                    }
+                ]
+            }
+        ],
+        "meta": {
+            "current_page": 1,
+            "last_page": 4,
+            "per_page": 1,
+            "total": 4,
+            "from": 1,
+            "to": 1,
+            "path": "https://daftra-task.test/api/v1/inventory"
+        },
+        "links": {
+            "first": "https://daftra-task.test/api/v1/inventory?page=1",
+            "last": "https://daftra-task.test/api/v1/inventory?page=4",
+            "prev": null,
+            "next": "https://daftra-task.test/api/v1/inventory?page=2"
+        }
+    }
+}
+```
+
+#### Stock Transfer
+```bash
+POST /api/v1/stock-transfers
+Authorization: Bearer your-token
+
+{
+    "inventory_item_id": 1,
+    "from_warehouse_id": 1,
+    "to_warehouse_id": 2,
+    "quantity": 10,
+    "notes": "Monthly stock redistribution"
+}
+
+Response:
+{
+    "message": {
+        "txt": [
+            "Stock transfer completed successfully"
+        ]
+    },
+    "data": {
+        "id": 4,
+        "from_warehouse": "Main Warehouse",
+        "to_warehouse": "West Coast Hub",
+        "inventory_item": "Wireless Mouse",
+        "quantity": 152,
+        "created_at": "2025-08-01T15:15:27.000000Z"
+    }
+}
+```
+
+### Postman Collection
+
+A comprehensive Postman collection is included in the `/docs/postman` directory:
+- File: `Inventory-Management-API.postman_collection.json`
+- Environment: `Inventory-API-Environment.postman_environment.json`
+
+#### Import Steps:
+1. Open Postman
+2. Click "Import"
+3. Select both collection and environment files
+4. Update environment variables (DAFTRA_URL, DAFTRA_AUTHORIZATION)
+
+## 🧪 Testing
+
+This project includes comprehensive tests covering all key functionality using SQLite for the test database.
+
+### Test Categories
+
+#### Unit Tests
+- Stock update logic validation
+- Over-transfer prevention
+- Low stock detection algorithms
+
+#### Feature Tests
+- API endpoint functionality
+
+#### Event Tests
+- LowStockDetected event firing
+- Event listener execution
+
+### Running Tests
+
+```bash
+# Run all tests
+php artisan test
+
+# Run specific test suites
+php artisan test --testsuite=Unit
+php artisan test --testsuite=Feature
+
+# Run specific test files
+php artisan test tests/Unit/StockTransferServiceTest.php
+php artisan test tests/Unit/LowStockEventTest.php
+php artisan test tests/Feature/InventoryTest.php
+php artisan test tests/Feature/StockTransferTest.php
+```
+
+### Test Database Configuration
+
+Tests use SQLite in memory. Configuration in `phpunit.xml`:
+
+```xml
+<env name="DB_CONNECTION" value="sqlite"/>
+<env name="DB_DATABASE" value=":memory:"/>
+<env name="CACHE_DRIVER" value="array"/>
+<env name="QUEUE_CONNECTION" value="sync"/>
+```
+
+## 📸 Screenshots
+
+### Stock Transfer Success
+![Stock Transfer](docs/screenshots/stock-transfer.png)
+
+### Test Results
+![Test Coverage](docs/screenshots/feature-test.png)
+
+### Low Stock Event Triggered
+![Low Stock Event](docs/screenshots/low-stock-event.png)
+
+## 🔧 Additional Features
+
+### Caching Strategy
+- Warehouse inventory endpoints are cached for 5 minutes
+
+### Event System
+- `LowStockDetected` event triggers when stock falls below threshold
+
+### Security Features
+- Input validation and sanitization
+- SQL injection prevention through Eloquent ORM
+
+### Error Handling
+- Structured error responses
+- Validation error details
+- Logging for debugging
+
+## 📞 Contact
+
+**Developer**: Hashem  
+**Phone**: +201157569289  
+**Email**: hashem.codes@gmail.com
+
+---
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+**Built with ❤️ using Laravel 12 & PHP 8.4**  
+*Inventory Management System - Backend Developer Test Task*
