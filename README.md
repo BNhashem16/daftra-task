@@ -387,6 +387,9 @@ Tests use SQLite in memory. Configuration in `phpunit.xml`:
 
 ## 📸 Screenshots
 
+### Life Cycle of Stock Transfer
+![Stock Transfer](docs/screenshots/life-cycle.jpg)
+
 ### Stock Transfer Success
 ![Stock Transfer](docs/screenshots/stock-transfer.png)
 
